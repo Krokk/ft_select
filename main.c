@@ -6,11 +6,23 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/08 15:45:10 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/09 20:07:06 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_select.h"
+
+static int how_print(t_select **lst)
+{
+    if ((*lst)->is_print)
+    {
+        if ((*lst)->is_cursor)
+            ft_putstr("\e[4m");
+        if ((*lst)->is_selected)
+            ft_putstr("\e[1m");
+    }
+    return (0);
+}
 
 static void print_arg(t_select **lst/*, struct winsize sz*/)
 {
@@ -21,14 +33,16 @@ static void print_arg(t_select **lst/*, struct winsize sz*/)
 
     while (tmp)
     {
+        how_print(&tmp);
         ft_putendl(tmp->name);
+        ft_putstr("\e[0m");
         tmp = tmp->next;
     }
 }
 
 static int show_cursor(t_select **lst)
 {
-    char buffer[3];
+    int buffer;
     t_select *tmp;
     struct winsize sz;
 
@@ -36,35 +50,18 @@ static int show_cursor(t_select **lst)
     print_arg(&tmp);
     while (1)
      {
-        read(0, buffer, 3);
+        read(0, &buffer, 8);
         ioctl(0, TIOCGWINSZ, &sz);
-        ft_putstr("\033[H\033[J");
-        print_arg(&tmp);
-        if (buffer[0] == 27)
-         {
-
-             printf("Screen width: %i  Screen height: %i\n", sz.ws_col, sz.ws_row);
-            if (buffer[2] == 65)
-                ft_putendl("fleche haut");
-            if (buffer[2] == 66)
-                ft_putendl("fleche bas");
-            if (buffer[2] == 67)
-                ft_putendl("fleche droit");
-            if (buffer[2] == 68)
-                ft_putendl("fleche gauche");
-         }
-        else if (buffer[0] == 4)
-        {
-            ft_putstr("\033[H\033[J");
-          printf("Ctlr+d, on quitte !\n");
-          return (0);
-        }
-        ft_putnbr(buffer[0]);
+        // ft_putstr("\033[H\033[J");
+        // print_arg(&tmp);
+        ft_putnbr(buffer);
         ft_putchar('\n');
-        ft_putnbr(buffer[1]);
-        ft_putchar('\n');
-        ft_putnbr(buffer[2]);
-        ft_putchar('\n');
+        buffer = 0;
+        // // if (buffer[0] == 4)
+        // {
+        //   printf("Ctlr+d, on quitte !\n");
+        //   return (0);
+        // }
     }
     return (0);
 }
@@ -121,7 +118,7 @@ static void get_arg(char **av, t_select **lst)
     }
 }
 
-static int set_termin(void)
+static int set_termm(void)
 {
     char           *name_term;
     struct termios term;
@@ -150,8 +147,8 @@ int              main(int ac, char **av)
     i = 0;
     (void)ac;
     lst = NULL;
-    get_arg(av, &lst);
-    set_termin();
+    get_arg(av + 1, &lst);
+    set_termm();
     show_cursor(&lst);
     return (0);
 }
