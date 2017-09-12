@@ -14,6 +14,8 @@
 NAME = ft_select
 CFLAGS += -Wall -Wextra -g
 SRC = main.c\
+	buffer.c\
+	
 
 LIB = ./libft/libft.a
 CC = gcc

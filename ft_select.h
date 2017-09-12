@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/08 15:29:47 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/12 16:13:36 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,28 @@
 //
 // }
 
+typedef struct s_data
+{
+            int list_lenght;
+            int pos;
+}              t_data;
+
 typedef struct s_select
 {
     char    *name;
     int     is_print;
     int     is_cursor;
     int     is_selected;
-    int     index;
     struct s_select *next;
+    struct s_select *prev;
 }               t_select;
 
-int		ft_ini(void);
-int		ft_exit(void);
-
+int                 ft_ini(void);
+int                 ft_exit(void);
+int                 set_termm(void);
+t_select            *handle_key(int buffer, t_select *tmp, int *ret);
+t_select            *move_cursor_down(t_select *tmp);
+t_select *move_cursor_up(t_select *tmp);
+t_select *select_it(t_select *tmp);
+void print_selected(t_select **lst);
 #endif
