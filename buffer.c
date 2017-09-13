@@ -6,7 +6,7 @@
 /*   By: tchapka <tchapka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/11 23:45:43 by tchapka           #+#    #+#             */
-/*   Updated: 2017/09/12 16:10:10 by tchapka          ###   ########.fr       */
+/*   Updated: 2017/09/13 08:26:58 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void print_selected(t_select **lst)
         if (tmp->is_selected)
         {
             ft_putstr(tmp->name);
-            ft_putstr(", ");
+            ft_putstr("  ");
         }
         (tmp) = tmp->next;
     }

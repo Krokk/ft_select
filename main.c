@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/12 16:09:56 by tchapka          ###   ########.fr       */
+/*   Updated: 2017/09/13 08:26:44 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,23 @@ static int how_print(t_select **lst)
     if ((*lst)->is_print)
     {
         if ((*lst)->is_cursor)
-            ft_putstr("\e[4m");
+            ft_putstr_fd(tgetstr("us", NULL), 0);
+
+            // ft_putstr("\e[4m");
         if ((*lst)->is_selected)
-            ft_putstr("\e[1m");
+            // ft_putstr("\e[1m");
+            ft_putstr_fd(tgetstr("mr", NULL), 0);
+
     }
     return (0);
 }
+
+int						ft_pointchar(int c)
+{
+	write(STDIN_FILENO, &c, 1);
+	return (0);
+}
+
 
 static void print_arg(t_select **lst)
 {
@@ -32,8 +43,9 @@ static void print_arg(t_select **lst)
     while (tmp)
     {
         how_print(&tmp);
-        ft_putendl(tmp->name);
-        ft_putstr("\e[0m");
+        ft_putstr_fd(tmp->name, 0);
+        ft_putstr_fd("\n", 0);
+        ft_putstr_fd(tgetstr("me", NULL), 0);
         tmp = tmp->next;
     }
 }
@@ -47,16 +59,18 @@ static int show_cursor(t_select **lst)
 
     tmp = *lst;
     ret = 0;
-    ft_putstr("\033[H\033[J");
+    tputs(tgetstr("cl", NULL), 1, ft_pointchar);
     print_arg(&tmp);
     while (ret != 1)
     {
         buffer = 0;
         read(0, &buffer, 8);
         ioctl(0, TIOCGWINSZ, &sz);
+        // ft_signal(&sz);
         tmp = handle_key(buffer, tmp, &ret);
-        ft_putstr("\033[H\033[J");
+        tputs(tgetstr("cl", NULL), 1, ft_pointchar);
         print_arg(lst);
+        // printf("Screen width: %i  Screen height: %i\n", sz.ws_col, sz.ws_row);
     }
     if (ret)
         print_selected(lst);
