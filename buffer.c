@@ -6,7 +6,7 @@
 /*   By: tchapka <tchapka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/11 23:45:43 by tchapka           #+#    #+#             */
-/*   Updated: 2017/09/13 11:51:26 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/13 15:03:26 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ t_select *handle_key(int buffer, t_select *tmp, int *ret)
         return ((select_it(tmp)));
     else if (buffer == PRESS_ENTER)
         *ret = 1;
-    else if (buffer == PRESS_DEL/* || buffer == PRESS_BACKSPACE*/)
+    else if (buffer == PRESS_DEL || buffer == PRESS_BACKSPACE)
         return ((delete_it(tmp)));
+    else if (buffer == PRESS_ESCAPE)
+        *ret = 2;
     return (tmp);
 }
 
@@ -149,5 +151,6 @@ t_select *delete_it(t_select *tmp)
     ft_strdel(&tmp->name);
     free(tmp);
     save->is_cursor = 1;
+    g_data->args_count -= 1;
     return (save);
 }

@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/13 11:41:40 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/13 15:20:55 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static void print_arg(t_select **lst)
     t_select *tmp;
 
     tmp = *lst;
+    ft_resize();
     while (tmp)
     {
         if (tmp->is_print == 1)
@@ -57,27 +58,27 @@ static int show_cursor(t_select **lst)
 {
     int buffer;
     t_select *tmp;
-    struct winsize sz;
+
     int ret;
 
     tmp = *lst;
     ret = 0;
     tputs(tgetstr("cl", NULL), 1, ft_pointchar);
-    // print_arg(&tmp);
     while (ret != 1)
     {
         print_arg(lst);
         buffer = 0;
         read(0, &buffer, 8);
-        ioctl(0, TIOCGWINSZ, &sz);
+
         // ft_signal(&sz);
         tmp = handle_key(buffer, tmp, &ret);
         tputs(tgetstr("cl", NULL), 1, ft_pointchar);
-
-        // printf("Screen width: %i  Screen height: %i\n", sz.ws_col, sz.ws_row);
+        // ft_putnbr_fd(buffer, 0);
     }
-    if (ret)
+    if (ret == 1)
         print_selected(lst);
+    // if (ret == 2)
+    //     quit_select()
     return (0);
 }
 
@@ -89,7 +90,11 @@ static void ft_error(int erno, char *msg)
 
 static int fillinfo(t_select *tmp, char *args, int i)
 {
+    int *len;
     tmp->name = ft_strdup(args);
+    len = ft_strlen(args);
+    if ((len >= g_data->max_name_len))
+        g_data->max_name_len = len;
     tmp->is_print = 1;
     if (i == 0)
         tmp->is_cursor = 1;
@@ -125,6 +130,7 @@ static void get_arg(char **av, t_select **lst)
     int i;
 
     i =  - 1;
+    g_data->max_name_len = 0;
     while (av[++i])
     {
         if (!(tmp = ft_memalloc(sizeof(t_select))) || !fillinfo(tmp, av[i], i))
@@ -132,6 +138,7 @@ static void get_arg(char **av, t_select **lst)
         else
             add_t_select_list(lst, tmp);
     }
+    g_data->args_count = i;
 }
 
 int              main(int ac, char **av)
