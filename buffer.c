@@ -6,7 +6,7 @@
 /*   By: tchapka <tchapka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/11 23:45:43 by tchapka           #+#    #+#             */
-/*   Updated: 2017/09/13 08:26:58 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/13 11:51:26 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void print_selected(t_select **lst)
         if (tmp->is_selected)
         {
             ft_putstr(tmp->name);
-            ft_putstr("  ");
+            if (tmp->next)
+                ft_putstr(" ");
         }
         (tmp) = tmp->next;
     }
@@ -62,6 +63,8 @@ t_select *handle_key(int buffer, t_select *tmp, int *ret)
         return ((select_it(tmp)));
     else if (buffer == PRESS_ENTER)
         *ret = 1;
+    else if (buffer == PRESS_DEL/* || buffer == PRESS_BACKSPACE*/)
+        return ((delete_it(tmp)));
     return (tmp);
 }
 
@@ -109,4 +112,42 @@ t_select *select_it(t_select *tmp)
     }
 	tmp->is_cursor = 1;
 	return (tmp);
+}
+
+t_select *delete_it(t_select *tmp)
+{
+    t_select *save;
+
+    if (tmp->prev)
+    {
+        if (tmp->next)
+        {
+            tmp->prev->next = tmp->next;
+            tmp->next->prev = tmp->prev;
+            save = tmp->next;
+        }
+        else
+        {
+            tmp->prev->next = NULL;
+            save = tmp->prev;
+        }
+    }
+    else
+    /* not working with the first elem  NEED FIX*/
+    {
+        if (tmp->next)
+        {
+            tmp->next->prev = NULL;
+            save = tmp->next;
+        }
+        else
+        {
+            ft_putendl_fd("ya plus rien mamen", 0);
+            exit (0);
+        }
+    }
+    ft_strdel(&tmp->name);
+    free(tmp);
+    save->is_cursor = 1;
+    return (save);
 }

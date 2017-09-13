@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/13 08:26:44 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/13 11:41:40 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,13 @@ static void print_arg(t_select **lst)
     tmp = *lst;
     while (tmp)
     {
-        how_print(&tmp);
-        ft_putstr_fd(tmp->name, 0);
-        ft_putstr_fd("\n", 0);
-        ft_putstr_fd(tgetstr("me", NULL), 0);
+        if (tmp->is_print == 1)
+        {
+            how_print(&tmp);
+            ft_putstr_fd(tmp->name, 0);
+            ft_putstr_fd("\n", 0);
+            ft_putstr_fd(tgetstr("me", NULL), 0);
+        }
         tmp = tmp->next;
     }
 }
@@ -60,16 +63,17 @@ static int show_cursor(t_select **lst)
     tmp = *lst;
     ret = 0;
     tputs(tgetstr("cl", NULL), 1, ft_pointchar);
-    print_arg(&tmp);
+    // print_arg(&tmp);
     while (ret != 1)
     {
+        print_arg(lst);
         buffer = 0;
         read(0, &buffer, 8);
         ioctl(0, TIOCGWINSZ, &sz);
         // ft_signal(&sz);
         tmp = handle_key(buffer, tmp, &ret);
         tputs(tgetstr("cl", NULL), 1, ft_pointchar);
-        print_arg(lst);
+
         // printf("Screen width: %i  Screen height: %i\n", sz.ws_col, sz.ws_row);
     }
     if (ret)

@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/12 16:13:36 by tchapka          ###   ########.fr       */
+/*   Updated: 2017/09/13 11:40:37 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,6 @@ t_select            *move_cursor_down(t_select *tmp);
 t_select *move_cursor_up(t_select *tmp);
 t_select *select_it(t_select *tmp);
 void print_selected(t_select **lst);
+t_select *delete_it(t_select *tmp);
+t_select *delete_it_norme(t_select **tmp);
 #endif
