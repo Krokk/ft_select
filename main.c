@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/14 15:49:29 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/14 19:57:45 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int						ft_pointchar(int c)
 }
 
 
-static void print_arg(t_select **lst)
+void print_arg(t_select *lst)
 {
     t_select *tmp;
     int col;
@@ -51,7 +51,7 @@ static void print_arg(t_select **lst)
     int y = 0;
     col = 0;
     line = 0;
-    tmp = *lst;
+    tmp = lst;
         // ft_putnbr_fd(g_data->win_col, 0);
         // ft_putendl_fd("--------", 0);
         // ft_putnbr_fd(g_data->win_line, 0);
@@ -94,11 +94,11 @@ static int show_cursor(t_select **lst)
 
     tmp = *lst;
     ret = 0;
-    // tputs(tgetstr("clz", NULL), 1, ft_pointchar);
+    tputs(tgetstr("cl", NULL), 1, ft_pointchar);
     while (ret != 1)
     {
-        if (!(ft_resize(1)))
-            print_arg(lst);
+        ft_signal();
+        print_arg(*lst);
         buffer = 0;
         read(0, &buffer, 8);
         tmp = handle_key(buffer, tmp, &ret);
@@ -171,6 +171,11 @@ static void get_arg(char **av, t_select **lst)
             add_t_select_list(lst, tmp);
     }
     g_data->args_count = i;
+}
+
+void    ft_signal(void)
+{
+    signal(SIGWINCH, ft_resize);
 }
 
 int              main(int ac, char **av)

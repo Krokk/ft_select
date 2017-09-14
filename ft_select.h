@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/14 15:48:35 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/14 19:55:51 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ typedef struct s_select
     struct s_select *prev;
 }               t_select;
 
+t_select             *g_select;
+
 int                 ft_ini(void);
 int                 ft_exit(void);
 int                 set_termm(void);
@@ -69,6 +71,7 @@ void print_selected(t_select **lst);
 t_select *delete_it(t_select *tmp);
 t_select *delete_it_norme(t_select **tmp);
 int						ft_pointchar(int c);
-int ft_resize(int i);
+void    ft_resize(int i);
 void    ft_signal(void);
+void print_arg(t_select *lst);
 #endif
