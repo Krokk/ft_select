@@ -6,9 +6,10 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/13 15:20:55 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/14 15:49:29 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "ft_select.h"
 
@@ -18,7 +19,6 @@ static int how_print(t_select **lst)
     {
         if ((*lst)->is_cursor)
             ft_putstr_fd(tgetstr("us", NULL), 0);
-
             // ft_putstr("\e[4m");
         if ((*lst)->is_selected)
             // ft_putstr("\e[1m");
@@ -38,19 +38,50 @@ int						ft_pointchar(int c)
 static void print_arg(t_select **lst)
 {
     t_select *tmp;
+    int col;
+    int line;
+    char *str;
+    // printf("\033[XA"); // Move up X lines;
+    // printf("\033[XB"); // Move down X lines;
+    // printf("\033[XC"); // Move right X column;
+    // printf("\033[XD"); // Move left X column;
+    // printf("\033[2J"); // Clear screen
 
+    int x =0;
+    int y = 0;
+    col = 0;
+    line = 0;
     tmp = *lst;
-    ft_resize();
-    while (tmp)
+        // ft_putnbr_fd(g_data->win_col, 0);
+        // ft_putendl_fd("--------", 0);
+        // ft_putnbr_fd(g_data->win_line, 0);
+        // ft_putendl_fd("--------", 0);
+        // ft_putnbr_fd(g_data->args_count, 0);
+        // ft_putendl_fd("--------", 0);
+    // tgoto(tgetstr("cm", NULL), 0);
+
+    // str = tgoto(tgetstr("cm", NULL), 10, 10);
+    tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+    while (col < g_data->win_col && tmp)
     {
-        if (tmp->is_print == 1)
+        while (line + 1 < g_data->win_line && tmp)
         {
+            tputs((tgoto(tgetstr("cm", NULL), x, y)), 1, ft_pointchar);
             how_print(&tmp);
             ft_putstr_fd(tmp->name, 0);
             ft_putstr_fd("\n", 0);
             ft_putstr_fd(tgetstr("me", NULL), 0);
+            tmp = tmp->next;
+            line++;
+            y++;
         }
-        tmp = tmp->next;
+        x += g_data->max_name_len + 4;
+        y = 0;
+        col++;
+        line = 0;
+        // MANAGE PADDING
+        // ft_putstr_fd("\033[20C", 0);
+        // MOVE THE CURSOR UP
     }
 }
 
@@ -63,17 +94,16 @@ static int show_cursor(t_select **lst)
 
     tmp = *lst;
     ret = 0;
-    tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+    // tputs(tgetstr("clz", NULL), 1, ft_pointchar);
     while (ret != 1)
     {
-        print_arg(lst);
+        if (!(ft_resize(1)))
+            print_arg(lst);
         buffer = 0;
         read(0, &buffer, 8);
-
-        // ft_signal(&sz);
         tmp = handle_key(buffer, tmp, &ret);
         tputs(tgetstr("cl", NULL), 1, ft_pointchar);
-        // ft_putnbr_fd(buffer, 0);
+
     }
     if (ret == 1)
         print_selected(lst);
@@ -90,10 +120,11 @@ static void ft_error(int erno, char *msg)
 
 static int fillinfo(t_select *tmp, char *args, int i)
 {
-    int *len;
+    int len;
+
     tmp->name = ft_strdup(args);
     len = ft_strlen(args);
-    if ((len >= g_data->max_name_len))
+    if ((len > g_data->max_name_len))
         g_data->max_name_len = len;
     tmp->is_print = 1;
     if (i == 0)
@@ -130,6 +161,7 @@ static void get_arg(char **av, t_select **lst)
     int i;
 
     i =  - 1;
+    g_data = ft_memalloc(sizeof(t_data));
     g_data->max_name_len = 0;
     while (av[++i])
     {
@@ -151,6 +183,7 @@ int              main(int ac, char **av)
     lst = NULL;
     get_arg(av + 1, &lst);
     set_termm();
+    ft_resize(1);
     show_cursor(&lst);
     return (0);
 }
