@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/13 07:58:46 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/16 15:31:05 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/16 17:32:20 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void    ft_signal(void)
 {
-    signal(SIGWINCH, ft_resize); // ajouter la gestion des autres signaux
+    signal(SIGWINCH, ft_resize);
+    // signal(SIGQUIT, set_termm_back);
 }
 
 int set_termm(void)
@@ -49,7 +50,7 @@ void   ft_resize(int i)
     g_data->win_col = sz.ws_col;
     g_data->win_line = sz.ws_row;
     col_nbr = (sz.ws_col / (g_data->max_name_len + 4));
-    if ((g_data->args_count / sz.ws_row)  >= col_nbr)
+    if ((g_data->args_count / sz.ws_row) +1 >= col_nbr)
     {
         tputs(tgetstr("cl", NULL), 1, ft_pointchar);
         ft_putstr_fd("PLEASE RESIZE THE TERMINAL", 0);
@@ -63,7 +64,9 @@ void   ft_resize(int i)
 }
 
 
-// void set_termm_back(void)
+// void set_termm_back(int i)
 // {
+//     (void)i;
+//
 //
 // }

@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/16 15:32:06 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/16 15:54:09 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,9 @@ int                 ft_ini(void);
 int                 ft_exit(void);
 int                 set_termm(void);
 t_select            *handle_key(int buffer, t_select *tmp, int *ret);
-// t_select            *move_cursor_down(t_select *tmp);
-// t_select *move_cursor_up(t_select *tmp);
-// t_select *select_it(t_select *tmp);
-// t_select *delete_it(t_select *tmp);
-int						ft_pointchar(int c);
+int     ft_pointchar(int c);
 void    ft_resize(int i);
 void    ft_signal(void);
 void print_arg(t_select *lst);
 int show_cursor(t_select **lst);
-
 #endif
