@@ -14,8 +14,9 @@
 NAME = ft_select
 CFLAGS += -Wall -Wextra -g
 SRC = main.c\
-	buffer.c\
-	signal.c
+	displace.c\
+	signal.c\
+	print.c
 
 
 LIB = ./libft/libft.a
