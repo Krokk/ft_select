@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/16 15:54:09 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/17 13:15:14 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,5 @@ void    ft_resize(int i);
 void    ft_signal(void);
 void print_arg(t_select *lst);
 int show_cursor(t_select **lst);
+void set_termm_back(int i);
 #endif

@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/13 07:58:46 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/16 17:32:20 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/17 13:42:44 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void    ft_signal(void)
 {
     signal(SIGWINCH, ft_resize);
-    // signal(SIGQUIT, set_termm_back);
+    signal(SIGINT, set_termm_back);
 }
 
 int set_termm(void)
@@ -40,7 +40,6 @@ int set_termm(void)
 
 void   ft_resize(int i)
 {
-
     (void)i;
     struct winsize sz;
     int col_nbr;
@@ -63,10 +62,13 @@ void   ft_resize(int i)
     }
 }
 
+void set_termm_back(int i)
+{
+    (void)i;
+    struct termios end;
 
-// void set_termm_back(int i)
-// {
-//     (void)i;
-//
-//
-// }
+
+    tputs(tgetstr("ve", NULL), 1, ft_pointchar);
+    tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+    exit(0);
+}

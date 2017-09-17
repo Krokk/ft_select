@@ -6,13 +6,11 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/16 15:32:27 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/17 10:49:51 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "ft_select.h"
-
 
 static void ft_error(int erno, char *msg)
 {
@@ -36,7 +34,7 @@ static int fillinfo(t_select *tmp, char *args, int i)
     return (1);
 }
 
-static void add_t_select_list(t_select **alst, t_select *new)
+void add_t_select_list(t_select **alst, t_select *new)
 {
     t_select	*lst;
 
@@ -85,6 +83,7 @@ int              main(int ac, char **av)
     lst = NULL;
     get_arg(av + 1, &lst);
     set_termm();
+    tputs(tgetstr("vi", NULL), 1, ft_pointchar);
     ft_signal();
     show_cursor(&lst);
     return (0);

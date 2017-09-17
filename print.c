@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/15 16:40:24 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/16 18:02:44 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/17 13:50:50 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ static void print_selected(t_select **lst)
         (tmp) = tmp->next;
     }
     ft_putstr("\n");
-    tputs(tgetstr("ve", NULL), 1, ft_pointchar);
 }
 
 static int how_print(t_select **lst)
@@ -78,7 +77,6 @@ void print_arg(t_select *lst)
     }
 }
 
-
 int show_cursor(t_select **lst)
 {
     int buffer;
@@ -99,7 +97,5 @@ int show_cursor(t_select **lst)
     }
     if (ret == 1)
         print_selected(lst);
-    // if (ret == 2)
-    //     quit_select()
     return (0);
 }

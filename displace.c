@@ -6,12 +6,11 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 15:29:13 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/16 15:30:21 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/17 13:40:41 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_select.h"
-
 
 static t_select *move_cursor_up(t_select *tmp)
 {
@@ -59,7 +58,7 @@ static t_select *select_it(t_select *tmp)
 	return (tmp);
 }
 
-static t_select *delete_it(t_select *tmp)
+static t_select *delete_it(t_select *tmp, int *ret)
 {
     t_select *save;
 
@@ -86,10 +85,7 @@ static t_select *delete_it(t_select *tmp)
             save = tmp->next;
         }
         else
-        {
-            ft_putendl_fd("ya plus rien mamen", 0);
-            exit (0);
-        }
+            set_termm_back(1);
     }
     ft_strdel(&tmp->name);
     free(tmp);
@@ -112,8 +108,8 @@ t_select *handle_key(int buffer, t_select *tmp, int *ret)
     else if (buffer == PRESS_ENTER)
         *ret = 1;
     else if (buffer == PRESS_DEL || buffer == PRESS_BACKSPACE)
-        return ((delete_it(tmp)));
+        return ((delete_it(tmp, ret)));
     else if (buffer == PRESS_ESCAPE)
-        *ret = 2;
+        set_termm_back(1);
     return (tmp);
 }

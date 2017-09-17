@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 16:03:52 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/16 18:06:49 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/17 13:42:35 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ static t_select *get_dir_content(t_select *tmp)
             add_t_select_list(&lst, new);
         free(path);
     }
-
 }
-
 
 void display_directory(t_select *tmp)
 {
