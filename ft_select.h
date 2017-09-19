@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/17 13:15:14 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/18 16:47:41 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,37 @@
 
 typedef struct s_data
 {
-            int win_col;
-            int win_line;
-            int max_name_len;
-            int args_count;
-            int is_print;
-}              t_data;
+    int             win_col;
+    int             win_line;
+    int             max_name_len;
+    int             args_count;
+    int             is_print;
+}                   t_data;
 
-t_data                  *g_data;
+t_data              *g_data;
 
 typedef struct s_select
 {
-    char    *name;
-    int     is_cursor;
-    int     is_selected;
+    char            *name;
+    int             is_cursor;
+    int             is_selected;
     struct s_select *next;
     struct s_select *prev;
-}               t_select;
+    int             line;
+}                   t_select;
 
-t_select             *g_select;
+t_select            *g_select;
 
 int                 ft_ini(void);
 int                 ft_exit(void);
 int                 set_termm(void);
 t_select            *handle_key(int buffer, t_select *tmp, int *ret);
-int     ft_pointchar(int c);
-void    ft_resize(int i);
-void    ft_signal(void);
-void print_arg(t_select *lst);
-int show_cursor(t_select **lst);
-void set_termm_back(int i);
+int                 ft_pointchar(int c);
+void                ft_resize(int i);
+void                ft_signal(void);
+void                print_arg(t_select *lst);
+int                 show_cursor(t_select **lst);
+int                 ft_quit(void);
+void                set_termm_back(int i);
+
 #endif

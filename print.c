@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/15 16:40:24 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/17 13:50:50 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/18 17:09:52 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,33 @@
 
 static void print_selected(t_select **lst)
 {
-    t_select *tmp;
+	t_select *tmp;
 
-    tmp = *lst;
-    while (tmp)
-    {
-        if (tmp->is_selected)
-        {
-            ft_putstr(tmp->name);
-            if (tmp->next)
-                ft_putstr(" ");
-        }
-        (tmp) = tmp->next;
-    }
-    ft_putstr("\n");
+	tmp = *lst;
+	while (tmp)
+	{
+		if (tmp->is_selected)
+		{
+			ft_putstr(tmp->name);
+			if (tmp->next)
+				ft_putstr(" ");
+		}
+		(tmp) = tmp->next;
+	}
+	ft_putstr("\n");
 }
 
 static int how_print(t_select **lst)
 {
-    if ((*lst)->is_cursor)
-        ft_putstr_fd(tgetstr("us", NULL), 0);
-    if ((*lst)->is_selected)
-        ft_putstr_fd(tgetstr("mr", NULL), 0);
-    return (0);
+    // gerer la couleur ici avec LSTAT
+    // ouvrir la balise couleur ici et refermer dans print arg
+	if ((*lst)->is_cursor)
+		ft_putstr_fd(tgetstr("us", NULL), 0);
+	if ((*lst)->is_selected)
+		ft_putstr_fd(tgetstr("mr", NULL), 0);
+	ft_putstr_fd((*lst)->name, 0);
+	ft_putstr_fd(tgetstr("me", NULL), 0);
+	return (0);
 }
 
 int						ft_pointchar(int c)
@@ -48,54 +52,50 @@ int						ft_pointchar(int c)
 
 void print_arg(t_select *lst)
 {
-    t_select *tmp;
-    int col;
-    int line;
-    int x;
+	t_select *tmp;
+	int pos;
+	int line;
+	int x;
 
-    x = 0;
-    col = 0;
-    line = -1;
-    tmp = lst;
-    tputs(tgetstr("cl", NULL), 1, ft_pointchar);
-    while (col < g_data->win_col && tmp)
-    {
-        while (++line + 1 < g_data->win_line && tmp)
-        {
-            tputs((tgoto(tgetstr("cm", NULL), x, line)), 1, ft_pointchar);
-            // METTRE LE PRINT DANS UNE SOUS FONCTION
-            //
-            how_print(&tmp);
-            ft_putstr_fd(tmp->name, 0);
-            ft_putstr_fd("\n", 0);
-            ft_putstr_fd(tgetstr("me", NULL), 0);
-            tmp = tmp->next;
-        }
-        x += g_data->max_name_len + 4;
-        col++;
-        line =  - 1;
-    }
+	x = 0;
+	pos = 0;
+	line = -1;
+	tmp = lst;
+	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	while (tmp)
+	{
+		while (++line + 1 < g_data->win_line && tmp)
+		{
+			tputs((tgoto(tgetstr("cm", NULL), x, line)), 1, ft_pointchar);
+			tmp->line = pos;
+			how_print(&tmp);
+			tmp = tmp->next;
+			pos++;
+		}
+		x += g_data->max_name_len + 4;
+		line =  - 1;
+	}
 }
 
 int show_cursor(t_select **lst)
 {
-    int buffer;
-    t_select *tmp;
-    int ret;
+	int buffer;
+	t_select *tmp;
+	int ret;
 
-    tmp = *lst;
-    ret = 0;
-    g_select = tmp;
-    tputs(tgetstr("cl", NULL), 1, ft_pointchar);
-    while (ret != 1)
-    {
-        ft_resize(1);
-        buffer = 0;
-        read(0, &buffer, 8);
-        tmp = handle_key(buffer, tmp, &ret);
-        tputs(tgetstr("cl", NULL), 1, ft_pointchar);
-    }
-    if (ret == 1)
-        print_selected(lst);
-    return (0);
+	tmp = *lst;
+	ret = 0;
+	g_select = tmp;
+	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	while (ret != 1)
+	{
+		ft_resize(1);
+		buffer = 0;
+		read(0, &buffer, 8);
+		tmp = handle_key(buffer, tmp, &ret);
+		tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	}
+	if (ret == 1)
+		print_selected(lst);
+	return (0);
 }

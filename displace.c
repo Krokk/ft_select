@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 15:29:13 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/17 13:40:41 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/19 15:17:51 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,21 @@
 
 static t_select *move_cursor_up(t_select *tmp)
 {
-    tmp->is_cursor = 0;
-    if (tmp->prev)
-        tmp = tmp->prev;
-    else
-    {
-        while (tmp->next)
-            tmp = tmp->next;
-    }
-    tmp->is_cursor = 1;
-    return (tmp);
+	tmp->is_cursor = 0;
+	if (tmp->prev)
+		tmp = tmp->prev;
+	else
+	{
+		while (tmp->next)
+			tmp = tmp->next;
+	}
+	tmp->is_cursor = 1;
+	return (tmp);
 }
 
 static t_select *move_cursor_down(t_select *tmp)
 {
-    tmp->is_cursor = 0;
+	tmp->is_cursor = 0;
 	if (tmp->next)
 		tmp = tmp->next;
 	else
@@ -42,74 +42,125 @@ static t_select *move_cursor_down(t_select *tmp)
 
 static t_select *select_it(t_select *tmp)
 {
-    if (tmp->is_selected)
-        tmp->is_selected = 0;
+	if (tmp->is_selected)
+		tmp->is_selected = 0;
 	else
 		tmp->is_selected = 1;
 	tmp->is_cursor = 0;
 	if (tmp->next)
-			tmp = tmp->next;
-    else
-    {
-        while (tmp->prev)
-            tmp = tmp->prev;
-    }
+		tmp = tmp->next;
+	else
+	{
+		while (tmp->prev)
+			tmp = tmp->prev;
+	}
 	tmp->is_cursor = 1;
 	return (tmp);
 }
 
 static t_select *delete_it(t_select *tmp, int *ret)
 {
-    t_select *save;
+	t_select *save;
 
-    if (tmp->prev)
-    {
-        if (tmp->next)
-        {
-            tmp->prev->next = tmp->next;
-            tmp->next->prev = tmp->prev;
-            save = tmp->next;
-        }
-        else
-        {
-            tmp->prev->next = NULL;
-            save = tmp->prev;
-        }
-    }
-    else
-    /* not working with the first elem  NEED FIX*/
-    {
-        if (tmp->next)
-        {
-            tmp->next->prev = NULL;
-            save = tmp->next;
-        }
-        else
-            set_termm_back(1);
-    }
-    ft_strdel(&tmp->name);
-    free(tmp);
-    save->is_cursor = 1;
-    g_data->args_count -= 1;
-    return (save);
+	tmp->is_selected = 0;
+	if (tmp->prev)
+	{
+		if (tmp->next)
+		{
+			tmp->prev->next = tmp->next;
+			tmp->next->prev = tmp->prev;
+			save = tmp->next;
+		}
+		else
+		{
+			tmp->prev->next = NULL;
+			save = tmp->prev;
+		}
+	}
+	else
+	{
+		if (tmp->next)
+		{
+			save = tmp->next;
+			save->prev = NULL;
+			g_select = g_select->next;
+			return (save);
+		}
+		else
+			set_termm_back(1);
+	}
+	save->is_cursor = 1;
+	g_data->args_count -= 1;
+	return (save);
+}
+
+static t_select *move_cursor_left(t_select *lst)
+{
+	t_select *tmp;
+	int i;
+
+	i = 0;
+	tmp = lst;
+	tmp->is_cursor = 0;
+	if ((tmp->line - g_data->win_line) >= -1)
+	{
+
+		while (++i < g_data->win_line)
+			tmp = tmp->prev;
+		tmp->is_cursor = 1;
+	}
+	else
+	{
+		while (tmp->prev)
+			tmp = tmp->prev;
+		tmp->is_cursor = 1;
+	}
+	return (tmp);
+}
+
+static t_select *move_cursor_right(t_select *lst)
+{
+	t_select *tmp;
+	int i;
+
+	i = 0;
+	tmp = lst;
+
+	tmp->is_cursor = 0;
+	if ((tmp->line + g_data->win_line) <= g_data->args_count)
+	{
+		while (++i < g_data->win_line)
+			tmp = tmp->next;
+		tmp->is_cursor = 1;
+	}
+	else
+	{
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->is_cursor = 1;
+	}
+	return (tmp);
 }
 
 t_select *handle_key(int buffer, t_select *tmp, int *ret)
 {
-    if (buffer == PRESS_DOWN)
-        return ((move_cursor_down(tmp)));
-    else if (buffer == PRESS_UP)
-        return ((move_cursor_up(tmp)));
-    // if (buffer == PRES_LEFT)
-    //     move_cursor_left(lst, data);
-    // if (buffer == PRES_RIGHT)
-    else if (buffer == PRESS_SPACE)
-        return ((select_it(tmp)));
-    else if (buffer == PRESS_ENTER)
-        *ret = 1;
-    else if (buffer == PRESS_DEL || buffer == PRESS_BACKSPACE)
-        return ((delete_it(tmp, ret)));
-    else if (buffer == PRESS_ESCAPE)
-        set_termm_back(1);
-    return (tmp);
+	if (buffer == PRESS_DOWN)
+		return ((move_cursor_down(tmp)));
+	else if (buffer == PRESS_UP)
+		return ((move_cursor_up(tmp)));
+	else if (buffer == PRESS_LEFT)
+	    return((move_cursor_left(tmp)));
+	else if (buffer == PRESS_RIGHT)
+		return((move_cursor_right(tmp)));
+	else if (buffer == PRESS_SPACE)
+		return ((select_it(tmp)));
+	else if (buffer == PRESS_ENTER)
+		*ret = 1;
+	else if (buffer == PRESS_DEL || buffer == PRESS_BACKSPACE)
+		return ((delete_it(tmp, ret)));
+	else if (buffer == PRESS_ESCAPE)
+		set_termm_back(1);
+	else
+		return (tmp);
+
 }
