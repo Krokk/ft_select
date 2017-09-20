@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/15 16:40:24 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/18 17:09:52 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/20 00:08:17 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,19 @@ static void print_selected(t_select **lst)
 	t_select *tmp;
 
 	tmp = *lst;
+
 	while (tmp)
 	{
 		if (tmp->is_selected)
 		{
-			ft_putstr(tmp->name);
+			ft_putstr_fd(tmp->name, 0);
 			if (tmp->next)
 				ft_putstr(" ");
 		}
 		(tmp) = tmp->next;
 	}
 	ft_putstr("\n");
+	set_termm_back(1);
 }
 
 static int how_print(t_select **lst)
@@ -97,5 +99,7 @@ int show_cursor(t_select **lst)
 	}
 	if (ret == 1)
 		print_selected(lst);
+	if (ret == 2)
+		set_termm_back(1);
 	return (0);
 }

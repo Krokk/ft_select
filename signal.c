@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/13 07:58:46 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/18 15:48:32 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/20 00:11:21 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,19 @@ void   ft_resize(int i)
 	}
 }
 
+static void free_t_select(void)
+{
+	t_select *save;
+
+	while (g_select)
+	{
+		save = g_select->next;
+		ft_strdel(&g_select->name);
+		free(g_select);
+		g_select = save;
+	}
+}
+
 void set_termm_back(int i)
 {
 	(void)i;
@@ -71,8 +84,10 @@ void set_termm_back(int i)
 	end.c_lflag |= ICANON;
 	end.c_lflag |= ECHO;
 	tputs(tgetstr("ve", NULL), 1, ft_pointchar);
-	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	// tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	tputs(tgetstr("me", NULL), 1, ft_pointchar);
 	tcsetattr(0, TCSANOW ,&end);
-	ft_quit();
+	free_t_select();
+	free((void*)&end);
 	exit(0);
 }

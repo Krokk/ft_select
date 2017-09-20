@@ -62,6 +62,7 @@ static t_select *delete_it(t_select *tmp, int *ret)
 {
 	t_select *save;
 
+	save = NULL;
 	tmp->is_selected = 0;
 	if (tmp->prev)
 	{
@@ -87,7 +88,7 @@ static t_select *delete_it(t_select *tmp, int *ret)
 			return (save);
 		}
 		else
-			set_termm_back(1);
+			*ret = 2;
 	}
 	save->is_cursor = 1;
 	g_data->args_count -= 1;
@@ -159,8 +160,6 @@ t_select *handle_key(int buffer, t_select *tmp, int *ret)
 	else if (buffer == PRESS_DEL || buffer == PRESS_BACKSPACE)
 		return ((delete_it(tmp, ret)));
 	else if (buffer == PRESS_ESCAPE)
-		set_termm_back(1);
-	else
-		return (tmp);
-
+		*ret = 2;
+	return (tmp);
 }
