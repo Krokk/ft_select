@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/13 07:58:46 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/20 00:11:21 by tchapka          ###   ########.fr       */
+/*   Updated: 2017/09/20 17:44:28 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void    ft_signal(void)
 {
 	signal(SIGWINCH, ft_resize);
 	signal(SIGINT, set_termm_back);
+	// signal(SIGSTOP,save_term)
 }
 
 int set_termm(void)
@@ -33,6 +34,7 @@ int set_termm(void)
 	term.c_lflag &= ~(ECHO);
 	term.c_cc[VMIN] = 1;
 	term.c_cc[VTIME] = 0;
+	// tputs(tgetstr("ti", NULL), 1, ft_pointchar);
 	if (tcsetattr(0, TCSADRAIN, &term) == -1)
 		return (-1);
 	return (0);
@@ -75,6 +77,12 @@ static void free_t_select(void)
 	}
 }
 
+
+static void save_term(int i)
+{
+
+}
+
 void set_termm_back(int i)
 {
 	(void)i;
@@ -84,10 +92,9 @@ void set_termm_back(int i)
 	end.c_lflag |= ICANON;
 	end.c_lflag |= ECHO;
 	tputs(tgetstr("ve", NULL), 1, ft_pointchar);
-	// tputs(tgetstr("cl", NULL), 1, ft_pointchar);
 	tputs(tgetstr("me", NULL), 1, ft_pointchar);
+	// tputs(tgetstr("te", NULL), 1, ft_pointchar);
 	tcsetattr(0, TCSANOW ,&end);
 	free_t_select();
-	free((void*)&end);
 	exit(0);
 }

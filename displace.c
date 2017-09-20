@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 15:29:13 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/19 15:17:51 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/20 15:55:14 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,6 @@ t_select *handle_key(int buffer, t_select *tmp, int *ret)
 	else if (buffer == PRESS_DEL || buffer == PRESS_BACKSPACE)
 		return ((delete_it(tmp, ret)));
 	else if (buffer == PRESS_ESCAPE)
-		*ret = 2;
+		set_termm_back(1);
 	return (tmp);
 }

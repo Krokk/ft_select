@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/15 16:40:24 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/20 00:08:17 by tchapka          ###   ########.fr       */
+/*   Updated: 2017/09/20 16:03:41 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ static void print_selected(t_select **lst)
 {
 	t_select *tmp;
 
-	tmp = *lst;
 
+	tmp = *lst;
 	while (tmp)
 	{
 		if (tmp->is_selected)
 		{
-			ft_putstr_fd(tmp->name, 0);
+			ft_putstr(tmp->name);
 			if (tmp->next)
 				ft_putstr(" ");
 		}

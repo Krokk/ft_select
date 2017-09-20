@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/17 15:17:36 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/20 16:00:38 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,16 @@ int              main(int ac, char **av)
 	t_select        *lst;
 
 	i = 0;
-	(void)ac;
-	lst = NULL;
-	get_arg(av + 1, &lst);
-	set_termm();
-	tputs(tgetstr("vi", NULL), 1, ft_pointchar);
-	ft_signal();
-	show_cursor(&lst);
-	return (0);
+    lst = NULL;
+	if (ac < 2)
+        ft_putendl_fd("usage : ./ft_select <arguments>", 2);
+    else
+    {
+        get_arg(av + 1, &lst);
+        set_termm();
+        tputs(tgetstr("vi", NULL), 1, ft_pointchar);
+        ft_signal();
+        show_cursor(&lst);
+        return (0);
+    }
 }
