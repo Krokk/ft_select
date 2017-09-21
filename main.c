@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/20 16:00:38 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/21 13:29:58 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,8 @@ int              main(int ac, char **av)
     {
         get_arg(av + 1, &lst);
         set_termm();
-        tputs(tgetstr("vi", NULL), 1, ft_pointchar);
         ft_signal();
         show_cursor(&lst);
-        return (0);
     }
+    return (0);
 }

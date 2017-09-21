@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 15:29:13 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/20 15:55:14 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/21 13:34:50 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,11 @@ static t_select *delete_it(t_select *tmp, int *ret)
 			return (save);
 		}
 		else
+		{
 			*ret = 2;
+			return (tmp);
+		}
+
 	}
 	save->is_cursor = 1;
 	g_data->args_count -= 1;
@@ -159,7 +163,7 @@ t_select *handle_key(int buffer, t_select *tmp, int *ret)
 		*ret = 1;
 	else if (buffer == PRESS_DEL || buffer == PRESS_BACKSPACE)
 		return ((delete_it(tmp, ret)));
-	else if (buffer == PRESS_ESCAPE)
+	if (buffer == PRESS_ESCAPE || *ret == 2)
 		set_termm_back(1);
 	return (tmp);
 }

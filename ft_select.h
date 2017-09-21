@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/18 16:47:41 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/21 13:06:03 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ typedef struct s_data
     int             max_name_len;
     int             args_count;
     int             is_print;
+    struct termios  term;
+    struct termios  save_term;
 }                   t_data;
 
 t_data              *g_data;

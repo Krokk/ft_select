@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/15 16:40:24 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/20 16:03:41 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/21 13:11:14 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,18 @@ static void print_selected(t_select **lst)
 
 
 	tmp = *lst;
+	tputs(tgetstr("te", NULL), 1, ft_pointchar);
 	while (tmp)
 	{
 		if (tmp->is_selected)
 		{
-			ft_putstr(tmp->name);
+			ft_putstr_fd(tmp->name, 1);
 			if (tmp->next)
 				ft_putstr(" ");
 		}
 		(tmp) = tmp->next;
 	}
-	ft_putstr("\n");
+	ft_putstr_fd("\n", 0);
 	set_termm_back(1);
 }
 
@@ -88,14 +89,13 @@ int show_cursor(t_select **lst)
 	tmp = *lst;
 	ret = 0;
 	g_select = tmp;
-	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	ft_resize(1);
 	while (ret != 1)
 	{
-		ft_resize(1);
+		print_arg(g_select);
 		buffer = 0;
 		read(0, &buffer, 8);
 		tmp = handle_key(buffer, tmp, &ret);
-		tputs(tgetstr("cl", NULL), 1, ft_pointchar);
 	}
 	if (ret == 1)
 		print_selected(lst);
