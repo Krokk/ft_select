@@ -6,37 +6,34 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/15 16:40:24 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/21 13:11:14 by tchapka          ###   ########.fr       */
+/*   Updated: 2017/09/21 17:30:34 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_select.h"
 
-static void print_selected(t_select **lst)
+static void		print_selected(t_select **lst)
 {
-	t_select *tmp;
-
+	t_select	*tmp;
 
 	tmp = *lst;
-	tputs(tgetstr("te", NULL), 1, ft_pointchar);
+	set_termm_back(1);
 	while (tmp)
 	{
 		if (tmp->is_selected)
 		{
-			ft_putstr_fd(tmp->name, 1);
+			ft_putstr(tmp->name);
 			if (tmp->next)
 				ft_putstr(" ");
 		}
 		(tmp) = tmp->next;
 	}
-	ft_putstr_fd("\n", 0);
-	set_termm_back(1);
 }
 
-static int how_print(t_select **lst)
+static int		how_print(t_select **lst)
 {
-    // gerer la couleur ici avec LSTAT
-    // ouvrir la balise couleur ici et refermer dans print arg
+	// gerer la couleur ici avec LSTAT
+	// ouvrir la balise couleur ici et refermer dans print arg
 	if ((*lst)->is_cursor)
 		ft_putstr_fd(tgetstr("us", NULL), 0);
 	if ((*lst)->is_selected)
@@ -46,19 +43,18 @@ static int how_print(t_select **lst)
 	return (0);
 }
 
-int						ft_pointchar(int c)
+int				ft_pointchar(int c)
 {
 	write(STDIN_FILENO, &c, 1);
 	return (0);
 }
 
-
-void print_arg(t_select *lst)
+void			print_arg(t_select *lst)
 {
-	t_select *tmp;
-	int pos;
-	int line;
-	int x;
+	t_select	*tmp;
+	int			pos;
+	int			line;
+	int			x;
 
 	x = 0;
 	pos = 0;
@@ -76,30 +72,32 @@ void print_arg(t_select *lst)
 			pos++;
 		}
 		x += g_data->max_name_len + 4;
-		line =  - 1;
+		line = -1;
 	}
 }
 
-int show_cursor(t_select **lst)
+int				show_cursor(t_select **lst)
 {
-	int buffer;
-	t_select *tmp;
-	int ret;
+	int			buffer;
+	t_select	*tmp;
+	int			ret;
 
 	tmp = *lst;
 	ret = 0;
 	g_select = tmp;
-	ft_resize(1);
-	while (ret != 1)
+	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	while (ret == 0)
 	{
-		print_arg(g_select);
+		ft_resize(1);
 		buffer = 0;
 		read(0, &buffer, 8);
 		tmp = handle_key(buffer, tmp, &ret);
+		tputs(tgetstr("cl", NULL), 1, ft_pointchar);
 	}
 	if (ret == 1)
 		print_selected(lst);
 	if (ret == 2)
 		set_termm_back(1);
+	free_t_select();
 	return (0);
 }

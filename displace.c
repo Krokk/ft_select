@@ -6,13 +6,13 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 15:29:13 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/21 13:34:50 by tchapka          ###   ########.fr       */
+/*   Updated: 2017/09/21 17:37:58 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_select.h"
 
-static t_select *move_cursor_up(t_select *tmp)
+static t_select	*move_cursor_up(t_select *tmp)
 {
 	tmp->is_cursor = 0;
 	if (tmp->prev)
@@ -26,7 +26,7 @@ static t_select *move_cursor_up(t_select *tmp)
 	return (tmp);
 }
 
-static t_select *move_cursor_down(t_select *tmp)
+static t_select	*move_cursor_down(t_select *tmp)
 {
 	tmp->is_cursor = 0;
 	if (tmp->next)
@@ -40,7 +40,7 @@ static t_select *move_cursor_down(t_select *tmp)
 	return (tmp);
 }
 
-static t_select *select_it(t_select *tmp)
+static t_select	*select_it(t_select *tmp)
 {
 	if (tmp->is_selected)
 		tmp->is_selected = 0;
@@ -58,9 +58,9 @@ static t_select *select_it(t_select *tmp)
 	return (tmp);
 }
 
-static t_select *delete_it(t_select *tmp, int *ret)
+static t_select	*delete_it(t_select *tmp, int *ret)
 {
-	t_select *save;
+	t_select	*save;
 
 	save = NULL;
 	tmp->is_selected = 0;
@@ -92,17 +92,16 @@ static t_select *delete_it(t_select *tmp, int *ret)
 			*ret = 2;
 			return (tmp);
 		}
-
 	}
 	save->is_cursor = 1;
 	g_data->args_count -= 1;
 	return (save);
 }
 
-static t_select *move_cursor_left(t_select *lst)
+static t_select	*move_cursor_left(t_select *lst)
 {
-	t_select *tmp;
-	int i;
+	t_select	*tmp;
+	int			i;
 
 	i = 0;
 	tmp = lst;
@@ -123,14 +122,13 @@ static t_select *move_cursor_left(t_select *lst)
 	return (tmp);
 }
 
-static t_select *move_cursor_right(t_select *lst)
+static t_select	*move_cursor_right(t_select *lst)
 {
-	t_select *tmp;
-	int i;
+	t_select	*tmp;
+	int			i;
 
 	i = 0;
 	tmp = lst;
-
 	tmp->is_cursor = 0;
 	if ((tmp->line + g_data->win_line) <= g_data->args_count)
 	{
@@ -147,23 +145,75 @@ static t_select *move_cursor_right(t_select *lst)
 	return (tmp);
 }
 
-t_select *handle_key(int buffer, t_select *tmp, int *ret)
+// static t_select	*select_all(t_select *lst)
+// {
+// 	t_select		*tmp;
+//
+// 	tmp = g_select;
+// 	if (lst->is_selected == 0)
+// 	{
+// 		while (tmp)
+// 		{
+// 			tmp->is_selected = 1;
+// 			tmp = tmp->next;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		while (tmp)
+// 		{
+// 			tmp->is_selected = 0;
+// 			tmp = tmp->next;
+// 		}
+// 	}
+// 	return (lst);
+// }
+
+// static t_select	*select_from(t_select *lst)
+// {
+// 	t_select		*tmp;
+//
+// 	tmp = lst;
+// 	if (lst->is_selected == 0)
+// 	{
+// 		while (tmp)
+// 		{
+// 			tmp->is_selected = 1;
+// 			tmp = tmp->next;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		while (tmp)
+// 		{
+// 			tmp->is_selected = 0;
+// 			tmp = tmp->next;
+// 		}
+// 	}
+// 	return (lst);
+// }
+
+t_select			*handle_key(int buffer, t_select *tmp, int *ret)
 {
 	if (buffer == PRESS_DOWN)
 		return ((move_cursor_down(tmp)));
 	else if (buffer == PRESS_UP)
 		return ((move_cursor_up(tmp)));
 	else if (buffer == PRESS_LEFT)
-	    return((move_cursor_left(tmp)));
+		return ((move_cursor_left(tmp)));
 	else if (buffer == PRESS_RIGHT)
-		return((move_cursor_right(tmp)));
+		return ((move_cursor_right(tmp)));
 	else if (buffer == PRESS_SPACE)
 		return ((select_it(tmp)));
+	// else if (buffer == valeur * )
+	// 	return ((select_all(tmp)));
+	// else if (buffer == valeur /)
+	// 	return ((select_from(tmp)));
 	else if (buffer == PRESS_ENTER)
 		*ret = 1;
-	else if (buffer == PRESS_DEL || buffer == PRESS_BACKSPACE)
+	else if (buffer == PRESS_BACKSPACE || buffer == PRESS_DEL)
 		return ((delete_it(tmp, ret)));
 	if (buffer == PRESS_ESCAPE || *ret == 2)
-		set_termm_back(1);
+		*ret = 2;
 	return (tmp);
 }
