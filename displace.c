@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 15:29:13 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/23 19:19:10 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/23 22:07:06 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,9 @@ static t_select	*select_it(t_select *tmp)
 static t_select	*delete_it(t_select *tmp, int *ret)
 {
 	t_select	*save;
-	t_select	*to_free;
 
 	save = NULL;
 	tmp->is_selected = 0;
-	to_free = tmp;
 	if (tmp->prev)
 	{
 		if (tmp->next)
@@ -76,9 +74,11 @@ static t_select	*delete_it(t_select *tmp, int *ret)
 		}
 		else
 		{
-			tmp->prev->next = NULL;
+			(tmp->prev)->next = NULL;
 			save = tmp->prev;
 		}
+		ft_strdel(&tmp->name);
+		free(tmp);
 	}
 	else
 	{
@@ -87,6 +87,8 @@ static t_select	*delete_it(t_select *tmp, int *ret)
 			save = tmp->next;
 			save->prev = NULL;
 			g_select = g_select->next;
+			g_data->args_count -= 1;
+			save->is_cursor = 1;
 			return (save);
 		}
 		else
@@ -133,7 +135,7 @@ static t_select	*move_cursor_right(t_select *lst)
 	i = -1;
 	tmp = lst;
 	tmp->is_cursor = 0;
-	if ((tmp->line + g_data->win_line) <= g_data->args_count)
+	if ((tmp->line + g_data->win_line) < g_data->args_count)
 	{
 		while (++i < g_data->win_line)
 			tmp = tmp->next;

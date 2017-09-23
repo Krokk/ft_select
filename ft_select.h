@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/23 19:10:12 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/23 22:16:40 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct		s_data
 	struct termios	term;
 	struct termios	save_term;
 	struct s_select	*head;
+    char            *name_term;
 }					t_data;
 
 t_data				*g_data;

@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/13 07:58:46 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/23 19:13:47 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/23 22:23:56 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,10 @@ void				ft_signal(void)
 
 int					set_termm(void)
 {
-	char			*name_term;
-
-	// free name term quand on quitte
-	if ((name_term = getenv("TERM")) == NULL)
-		ft_error(2, "<TERM> VARIABLE NOT FOUND");
-	if (tgetent(NULL, name_term) == ERR)
-		ft_error(2, "VARIABLE NOT VALID");
+	if ((g_data->name_term = getenv("TERM")) == NULL)
+		ft_error(2, "<TERM> variable cannot be found");
+	if (tgetent(NULL, g_data->name_term) == ERR)
+		ft_error(2, "<TERM> variable invalid");
 	if (tcgetattr(0, &g_data->save_term) == -1)
 		ft_error(2, "tcgetattr");
 	if (tcgetattr(0, &g_data->term) == -1)
@@ -115,5 +112,6 @@ void				set_termm_quit(int i)
 	tputs(tgetstr("ve", NULL), 1, ft_pointchar);
 	tputs(tgetstr("te", NULL), 1, ft_pointchar);
 	tcsetattr(0, TCSANOW, &g_data->save_term);
+	free_t_select();
 	exit (0);
 }
