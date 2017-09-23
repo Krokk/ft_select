@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/13 07:58:46 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/21 17:34:46 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/23 19:13:47 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,17 @@
 static void			set_termm_cont(int i)
 {
 	(void)i;
+	ft_signal();
 	set_termm();
-	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
-	print_arg(g_select);
+	ft_resize(1);
 }
 
 void				ft_signal(void)
 {
 	signal(SIGWINCH, ft_resize);
-	signal(SIGINT, set_termm_back);
-	signal(SIGSTOP, set_termm_back);
+	signal(SIGINT, set_termm_quit);
+	signal(SIGQUIT, set_termm_quit);
+	signal(SIGTSTP, set_termm_back);
 	signal(SIGCONT, set_termm_cont);
 }
 
@@ -61,30 +62,58 @@ void				ft_resize(int i)
 	ioctl(STDERR_FILENO, TIOCGWINSZ, &sz);
 	g_data->win_col = sz.ws_col;
 	g_data->win_line = sz.ws_row;
-	col_nbr = (sz.ws_col / (g_data->max_name_len + 4)) + 1;
-	if ((g_data->args_count / sz.ws_row) + 1 >= col_nbr)
+	col_nbr = (sz.ws_col / (g_data->max_name_len + 4));
+	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	if ((g_data->args_count % sz.ws_row) == 0)
+		col_nbr++;
+	if ((g_data->args_count / sz.ws_row) + 1 > col_nbr)
 		ft_putstr_fd("PLEASE RESIZE THE TERMINAL", 0);
 	else
 		print_arg(g_select);
+
 }
 
 void				free_t_select(void)
 {
 	t_select		*save;
+	t_select		*tmp;
 
-	while (g_select)
+	tmp = g_data->head;
+	while (tmp)
 	{
-		save = g_select->next;
-		ft_strdel(&g_select->name);
-		free(g_select);
-		g_select = save;
+		save = tmp->next;
+		ft_strdel(&tmp->name);
+		free(tmp);
+		tmp = save;
 	}
 }
 
 void				set_termm_back(int i)
 {
 	(void)i;
-	tcsetattr(0, TCSANOW, &g_data->save_term);
+	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
 	tputs(tgetstr("ve", NULL), 1, ft_pointchar);
 	tputs(tgetstr("te", NULL), 1, ft_pointchar);
+	tcsetattr(0, TCSADRAIN, &g_data->save_term);
+	signal(SIGTSTP, SIG_DFL);
+	ioctl(0, TIOCSTI, "\032");
+}
+
+void				set_termm_clear(int i)
+{
+	(void)i;
+	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	tputs(tgetstr("ve", NULL), 1, ft_pointchar);
+	tputs(tgetstr("te", NULL), 1, ft_pointchar);
+	tcsetattr(0, TCSANOW, &g_data->save_term);
+}
+
+void				set_termm_quit(int i)
+{
+	(void)i;
+	tputs(tgetstr("cl", NULL), 1, ft_pointchar);
+	tputs(tgetstr("ve", NULL), 1, ft_pointchar);
+	tputs(tgetstr("te", NULL), 1, ft_pointchar);
+	tcsetattr(0, TCSANOW, &g_data->save_term);
+	exit (0);
 }

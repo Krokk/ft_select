@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/06 20:16:41 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/17 11:26:08 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/23 19:21:31 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 # define PRESS_ENTER			10
 # define PRESS_ESCAPE			27
 # define PRESS_BACKSPACE		127
-
-
+# define PRESS_STARS			42
+# define PRESS_BACKSLASH		47
 
 typedef	struct		s_list
 {

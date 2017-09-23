@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/21 17:37:22 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/23 19:10:12 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ typedef struct		s_data
 	int				win_line;
 	int				max_name_len;
 	int				args_count;
-	int				is_print;
+	int				listen;
 	struct termios	term;
 	struct termios	save_term;
+	struct s_select	*head;
 }					t_data;
 
 t_data				*g_data;
@@ -43,6 +44,7 @@ typedef struct		s_select
 	char			*name;
 	int				is_cursor;
 	int				is_selected;
+	int				is_print;
 	struct s_select	*next;
 	struct s_select	*prev;
 	int				line;
@@ -62,4 +64,6 @@ int					show_cursor(t_select **lst);
 void				ft_error(int erno, char *msg);
 void				free_t_select(void);
 void				set_termm_back(int i);
+void				set_termm_quit(int i);
+void				set_termm_clear(int i);
 #endif

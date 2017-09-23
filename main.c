@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:18:05 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/21 17:25:28 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/23 16:35:34 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static int		fillinfo(t_select *tmp, char *args, int i)
 	else
 		tmp->is_cursor = 0;
 	tmp->is_selected = 0;
+	tmp->is_print = 1;
 	return (1);
 }
 
@@ -73,6 +74,7 @@ static void		get_arg(char **av, t_select **lst)
 			add_t_select_list(lst, tmp);
 	}
 	g_data->args_count = i;
+	g_data->head = *lst;
 }
 
 int				main(int ac, char **av)
@@ -88,7 +90,6 @@ int				main(int ac, char **av)
 	{
 		get_arg(av + 1, &lst);
 		set_termm();
-		tputs(tgetstr("vi", NULL), 1, ft_pointchar);
 		ft_signal();
 		show_cursor(&lst);
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 15:29:13 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/21 17:37:58 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/23 19:19:10 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,11 @@ static t_select	*select_it(t_select *tmp)
 static t_select	*delete_it(t_select *tmp, int *ret)
 {
 	t_select	*save;
+	t_select	*to_free;
 
 	save = NULL;
 	tmp->is_selected = 0;
+	to_free = tmp;
 	if (tmp->prev)
 	{
 		if (tmp->next)
@@ -94,7 +96,8 @@ static t_select	*delete_it(t_select *tmp, int *ret)
 		}
 	}
 	save->is_cursor = 1;
-	g_data->args_count -= 1;
+	if ((g_data->args_count -= 1) <= 0)
+		*ret = 2;
 	return (save);
 }
 
@@ -103,7 +106,7 @@ static t_select	*move_cursor_left(t_select *lst)
 	t_select	*tmp;
 	int			i;
 
-	i = 0;
+	i = -1;
 	tmp = lst;
 	tmp->is_cursor = 0;
 	if ((tmp->line - g_data->win_line) >= -1)
@@ -127,7 +130,7 @@ static t_select	*move_cursor_right(t_select *lst)
 	t_select	*tmp;
 	int			i;
 
-	i = 0;
+	i = -1;
 	tmp = lst;
 	tmp->is_cursor = 0;
 	if ((tmp->line + g_data->win_line) <= g_data->args_count)
@@ -145,53 +148,53 @@ static t_select	*move_cursor_right(t_select *lst)
 	return (tmp);
 }
 
-// static t_select	*select_all(t_select *lst)
-// {
-// 	t_select		*tmp;
-//
-// 	tmp = g_select;
-// 	if (lst->is_selected == 0)
-// 	{
-// 		while (tmp)
-// 		{
-// 			tmp->is_selected = 1;
-// 			tmp = tmp->next;
-// 		}
-// 	}
-// 	else
-// 	{
-// 		while (tmp)
-// 		{
-// 			tmp->is_selected = 0;
-// 			tmp = tmp->next;
-// 		}
-// 	}
-// 	return (lst);
-// }
+static t_select	*select_all(t_select *lst)
+{
+	t_select		*tmp;
 
-// static t_select	*select_from(t_select *lst)
-// {
-// 	t_select		*tmp;
-//
-// 	tmp = lst;
-// 	if (lst->is_selected == 0)
-// 	{
-// 		while (tmp)
-// 		{
-// 			tmp->is_selected = 1;
-// 			tmp = tmp->next;
-// 		}
-// 	}
-// 	else
-// 	{
-// 		while (tmp)
-// 		{
-// 			tmp->is_selected = 0;
-// 			tmp = tmp->next;
-// 		}
-// 	}
-// 	return (lst);
-// }
+	tmp = g_select;
+	if (lst->is_selected == 0)
+	{
+		while (tmp)
+		{
+			tmp->is_selected = 1;
+			tmp = tmp->next;
+		}
+	}
+	else
+	{
+		while (tmp)
+		{
+			tmp->is_selected = 0;
+			tmp = tmp->next;
+		}
+	}
+	return (lst);
+}
+
+static t_select	*select_from(t_select *lst)
+{
+	t_select		*tmp;
+
+	tmp = lst;
+	if (lst->is_selected == 0)
+	{
+		while (tmp)
+		{
+			tmp->is_selected = 1;
+			tmp = tmp->next;
+		}
+	}
+	else
+	{
+		while (tmp)
+		{
+			tmp->is_selected = 0;
+			tmp = tmp->next;
+		}
+	}
+	return (lst);
+}
 
 t_select			*handle_key(int buffer, t_select *tmp, int *ret)
 {
@@ -205,10 +208,10 @@ t_select			*handle_key(int buffer, t_select *tmp, int *ret)
 		return ((move_cursor_right(tmp)));
 	else if (buffer == PRESS_SPACE)
 		return ((select_it(tmp)));
-	// else if (buffer == valeur * )
-	// 	return ((select_all(tmp)));
-	// else if (buffer == valeur /)
-	// 	return ((select_from(tmp)));
+	else if (buffer == PRESS_STARS)
+		return ((select_all(tmp)));
+	else if (buffer == PRESS_BACKSLASH)
+		return ((select_from(tmp)));
 	else if (buffer == PRESS_ENTER)
 		*ret = 1;
 	else if (buffer == PRESS_BACKSPACE || buffer == PRESS_DEL)
