@@ -1,5 +1,0 @@
-*.o
-*.DSYM
-*.a
-ft_select
-libft.a
