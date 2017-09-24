@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/06 20:16:41 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/24 02:16:17 by tchapka          ###   ########.fr       */
+/*   Updated: 2017/09/24 02:56:57 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,4 @@ size_t				ft_strcspn(const char *str1, char str2);
 void				ft_putnstr(char const *s, size_t n);
 char				*ft_freejoinstr(char *dst, char *src);
 void				ft_freearraystr(char **array);
-char				*ft_pathjoin(char *folder, char *target);
 #endif

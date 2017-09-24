@@ -78,7 +78,6 @@ SRC = ft_bzero.c\
 	  ft_putnstr.c\
 	  ft_freejoinstr.c\
 	  ft_freearraystr.c\
-	  ft_pathjoin.c
 
 OBJDIR = objs
 HEADERFLAGS = -I libft.h

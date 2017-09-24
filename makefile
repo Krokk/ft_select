@@ -20,7 +20,7 @@ SRC = main.c\
 
 
 LIB = ./libft/libft.a
-CC = gcc
+CC = @gcc
 OBJ = $(SRC:.c=.o)
 
 # COLOR
