@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/06 20:16:41 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/23 19:21:31 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/24 02:16:17 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
 
 # define DEFAULT "\033[0m"
 # define BLACK "\033[30m"
@@ -113,4 +114,5 @@ size_t				ft_strcspn(const char *str1, char str2);
 void				ft_putnstr(char const *s, size_t n);
 char				*ft_freejoinstr(char *dst, char *src);
 void				ft_freearraystr(char **array);
+char				*ft_pathjoin(char *folder, char *target);
 #endif

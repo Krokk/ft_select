@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/15 16:40:24 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/23 19:13:32 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/24 02:40:07 by tchapka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,37 @@ static void		print_selected(t_select **lst)
 		ft_putstr("\n");
 }
 
+static char *select_color(t_select *lst)
+{
+	struct stat		buffer;
+	char			*cwd;
+
+	cwd = getcwd(NULL, 1025);
+	if (!(lstat((ft_pathjoin(cwd, lst->name)), &buffer)))
+	{
+		return ("\033[0m");
+	}
+	else if (S_ISDIR(buffer.st_mode))
+		return ("\033[31m");
+	else if (S_ISLNK(buffer.st_mode))
+		return ("\033[36m");
+	else if (S_ISREG(buffer.st_mode))
+		return ("\033[33m");
+	return ("\033[31m");
+}
+
 static int		how_print(t_select **lst)
 {
-	// gerer la couleur ici avec LSTAT
-	// ouvrir la balise couleur ici et refermer dans print arg
+
 	if ((*lst)->is_cursor)
 		ft_putstr_fd(tgetstr("us", NULL), 0);
 	if ((*lst)->is_selected)
 		ft_putstr_fd(tgetstr("mr", NULL), 0);
+	ft_putstr_fd((select_color(*lst)), 0);
 	ft_putstr_fd((*lst)->name, 0);
+	ft_putstr_fd("\033[0m", 0);
 	ft_putstr_fd(tgetstr("me", NULL), 0);
+
 	return (0);
 }
 
