@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 15:13:28 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/25 15:27:42 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/25 17:53:00 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static t_select	*detele_it_norme(t_select *lst, int *ret)
 		tmp = lst->next;
 		tmp->prev = NULL;
 		g_select = g_select->next;
-		g_data->args_count -= 1;
 		tmp->is_cursor = 1;
 		return (tmp);
 	}

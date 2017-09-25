@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/16 15:29:13 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/25 15:28:48 by rfabre           ###   ########.fr       */
+/*   Updated: 2017/09/25 17:41:36 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static t_select	*move_cursor_left(t_select *lst)
 	i = -1;
 	tmp = lst;
 	tmp->is_cursor = 0;
-	if ((tmp->line - g_data->win_line) >= -1)
+	if ((tmp->line - g_data->win_line) > -1)
 	{
 		while (++i < g_data->win_line)
 			tmp = tmp->prev;
