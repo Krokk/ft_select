@@ -6,13 +6,13 @@
 #    By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/09/05 17:20:16 by rfabre            #+#    #+#              #
-#    Updated: 2017/09/05 17:20:57 by rfabre           ###   ########.fr        #
+#    Updated: 2017/09/25 16:19:55 by rfabre           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .PHONY : all clean fclean re
 NAME = ft_select
-CFLAGS += -Wall -Wextra -g
+CFLAGS += -Wall -Wextra -Werror
 SRC = main.c\
 	displace.c\
 	signal.c\
