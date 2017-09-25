@@ -6,7 +6,7 @@
 /*   By: rfabre <rfabre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/05 10:17:43 by rfabre            #+#    #+#             */
-/*   Updated: 2017/09/23 22:16:40 by tchapka          ###   ########.fr       */
+/*   Updated: 2017/09/25 15:30:16 by rfabre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct		s_data
 	struct termios	term;
 	struct termios	save_term;
 	struct s_select	*head;
-    char            *name_term;
+	char			*name_term;
 }					t_data;
 
 t_data				*g_data;
@@ -67,4 +67,8 @@ void				free_t_select(void);
 void				set_termm_back(int i);
 void				set_termm_quit(int i);
 void				set_termm_clear(int i);
+t_select			*delete_it(t_select *tmp, int *ret);
+t_select			*move_cursor_up(t_select *tmp);
+t_select			*move_cursor_down(t_select *tmp);
+t_select			*select_it(t_select *tmp);
 #endif

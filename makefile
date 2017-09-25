@@ -16,7 +16,9 @@ CFLAGS += -Wall -Wextra -g
 SRC = main.c\
 	displace.c\
 	signal.c\
-	print.c
+	print.c\
+	list.c\
+	term.c
 
 
 LIB = ./libft/libft.a
